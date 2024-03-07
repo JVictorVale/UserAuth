@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer" Version="5.1.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.16">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0"/>
+        <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="6.5.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\UserAuth.Application\UserAuth.Application.csproj" />
+      <ProjectReference Include="..\UserAuth.Core\UserAuth.Core.csproj" />
+      <ProjectReference Include="..\UserAuth.Domain\UserAuth.Domain.csproj" />
+      <ProjectReference Include="..\UserAuth.Infra\UserAuth.Infra.csproj" />
+    </ItemGroup>
+
+</Project>
