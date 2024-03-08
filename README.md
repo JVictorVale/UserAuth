@@ -16,10 +16,10 @@ Desenvolver um sistema de autenticação de usuário, permitindo que o usuário 
 
 * Usuario
   * Id (int)
-  * Nome (Required, varchar(150))
-  * Cpf (Required, varchar(11))
-  * Email (Required, varchar(100))
-  * Senha (Required, varchar(255))
+  * Nome (Required, varchar)
+  * Cpf (Required, varchar)
+  * Email (Required, varchar)
+  * Senha (Required, varchar)
   * CriadoEm (Required, DateTime)
   * AtualizadoEm (Required, DateTime)
  
@@ -40,7 +40,8 @@ Desenvolver um sistema de autenticação de usuário, permitindo que o usuário 
 *  ### Autor
 ---
 
-Feito por Victor Vale 👋🏽 Entre em contato!
+Feito por Victor Vale
+Entre em contato! 👋🏽 
 
 [![Linkedin Badge](https://img.shields.io/badge/-Victor-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/jvictorvale/)](https://www.linkedin.com/in/jvictorvale/) 
 [![Gmail Badge](https://img.shields.io/badge/-joaovictorvale.dev@gmail.com-c14438?style=flat-square&logo=Gmail&logoColor=white&link=mailto:joaovictorvale.dev@gmail.com)](mailto:joaovictorvale.dev@gmail.com)
