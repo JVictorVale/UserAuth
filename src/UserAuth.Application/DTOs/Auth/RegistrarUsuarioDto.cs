@@ -1,6 +1,6 @@
-﻿namespace UserAuth.Application.DTOs.Usuario;
+﻿namespace UserAuth.Application.DTOs.Auth;
 
-public class AdicionarUsuarioDto
+public class RegistrarUsuarioDto
 {
     public string Nome { get; set; } = null!;
     public string Cpf { get; set; } = null!;

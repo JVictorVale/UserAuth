@@ -35,4 +35,19 @@ public class UsuarioRepository : Repository<Usuario>, IUsuarioRepository
     {
         return await Context.Usuarios.AsNoTrackingWithIdentityResolution().ToListAsync();
     }
+
+    public async Task<Usuario?> ObterPorTokenDeVerificacao(string token)
+    {
+        return await Context.Usuarios.FirstOrDefaultAsync(u => u.TokenDeVerificacao == token);
+    }
+
+    public async Task<Usuario?> ObterPorTokenDeResetSenha(string token)
+    {
+        return await Context.Usuarios.FirstOrDefaultAsync(u => u.TokenDeResetSenha == token);
+    }
+    
+    public async Task<Usuario?> ObterPedidoResetSenhaValido(int id)
+    {
+        return await Context.Usuarios.FirstOrDefaultAsync(u => u.Id == id && u.ExpiraResetToken > DateTime.Now);
+    }
 }

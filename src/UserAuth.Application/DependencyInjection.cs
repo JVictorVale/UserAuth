@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ScottBrady91.AspNetCore.Identity;
 using UserAuth.Application.Contracts;
+using UserAuth.Application.Email;
 using UserAuth.Application.Notifications;
 using UserAuth.Application.Services;
 using UserAuth.Core.Settings;
@@ -18,6 +19,7 @@ public static class DependencyInjection
     {
         services.Configure<AppSettings>(configuration.GetSection("AppSettings"));
         services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
+        services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
     }
     
     public static void ConfigureApplication(this IServiceCollection services, IConfiguration configuration)
@@ -39,6 +41,7 @@ public static class DependencyInjection
 
         services
             .AddScoped<IAuthService, AuthService>() 
-            .AddScoped<IUsuarioService, UsuarioService>();
+            .AddScoped<IUsuarioService, UsuarioService>()
+            .AddScoped<IEmailService, EmailService>();
     }
 }

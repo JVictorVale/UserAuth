@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using UserAuth.Application.DTOs.Auth;
 using UserAuth.Application.DTOs.Usuario;
 using UserAuth.Core.Extensions;
 using UserAuth.Domain.Entities;
@@ -11,7 +12,7 @@ public class AutoMapperProfile : Profile
     {
         CreateMap<Usuario, UsuarioDto>().ReverseMap()
             .AfterMap((_, dest) => dest.Cpf = dest.Cpf.SomenteNumeros()!);
-        CreateMap<Usuario, AdicionarUsuarioDto>().ReverseMap()
+        CreateMap<Usuario, RegistrarUsuarioDto>().ReverseMap()
             .AfterMap((_, dest) => dest.Cpf = dest.Cpf.SomenteNumeros()!);
         CreateMap<Usuario, AtualizarUsuarioDto>().ReverseMap()
             .AfterMap((_, dest) => dest.Cpf = dest.Cpf.SomenteNumeros()!);

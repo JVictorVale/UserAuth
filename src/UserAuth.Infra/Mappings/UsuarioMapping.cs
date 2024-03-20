@@ -25,5 +25,23 @@ public class UsuarioMapping : IEntityTypeConfiguration<Usuario>
         builder.Property(a => a.Senha)
             .HasMaxLength(255)
             .IsRequired();
+        
+        builder
+            .Property(u => u.TokenDeVerificacao)
+            .HasMaxLength(255)
+            .IsRequired();
+        
+        builder
+            .Property(u => u.ContaVerificada)
+            .HasDefaultValue(false);
+
+        builder
+            .Property(u => u.TokenDeResetSenha)
+            .HasMaxLength(255)
+            .IsRequired(false);
+
+        builder
+            .Property(u => u.ExpiraResetToken)
+            .IsRequired(false);
     }
 }

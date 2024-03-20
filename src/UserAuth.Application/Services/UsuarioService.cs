@@ -19,32 +19,6 @@ public class UsuarioService : BaseService, IUsuarioService
         _passwordHasher = passwordHasher;
     }
 
-    public async Task<UsuarioDto?> Adicionar(AdicionarUsuarioDto usuarioDto)
-    {
-        var usuario = Mapper.Map<Usuario>(usuarioDto);
-        
-        if (usuarioDto.Senha != usuarioDto.ConfirmarSenha)
-        {
-            Notificator.Handle("As senhas informadas não coincidem");
-            return null;
-        }
-        
-        if (!await Validar(usuario))
-        {
-            return null;
-        }
-        
-        usuario.Senha = _passwordHasher.HashPassword(usuario, usuario.Senha);
-        _usuarioRepository.Cadastrar(usuario);
-        if (await _usuarioRepository.UnitOfWork.Commit())
-        {
-            return Mapper.Map<UsuarioDto>(usuario);
-        }
-
-        Notificator.Handle("Não foi possível cadastrar o usuário");
-        return null;
-    }
-
     public async Task<UsuarioDto?> Atualizar(int id, AtualizarUsuarioDto usuarioDto)
     {
         if (id != usuarioDto.Id)

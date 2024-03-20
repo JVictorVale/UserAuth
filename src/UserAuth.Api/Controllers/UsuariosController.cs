@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using UserAuth.Application.Contracts;
 using UserAuth.Application.DTOs.Usuario;
@@ -15,17 +14,6 @@ public class UsuariosController : BaseController
     public UsuariosController(INotificator notificator, IUsuarioService usuarioService) : base(notificator)
     {
         _usuarioService = usuarioService;
-    }
-    
-    [AllowAnonymous]
-    [HttpPost]
-    [SwaggerOperation(Summary = "Cadastro de um Usuário", Tags = new[] { "Usuário - Usuarios" })]
-    [ProducesResponseType(typeof(UsuarioDto), StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    [ProducesResponseType(StatusCodes.Status403Forbidden)]
-    public async Task<IActionResult> Adicionar([FromForm] AdicionarUsuarioDto dto)
-    {
-        return OkResponse(await _usuarioService.Adicionar(dto));
     }
     
     [HttpPut("{id}")]
