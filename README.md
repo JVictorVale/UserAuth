@@ -10,7 +10,15 @@ Desenvolver um sistema de autenticação de usuário, permitindo que o usuário 
 
 *Obs.: Coloquei outras opções de rotas como ObterPorId e ObterTodos para integração do projeto da API com o FrontEnd*
 
-*Obs².: Irei continuar a construção da API utilizando recuperação de senha com e-mail e pertimir que o usuário coloque sua foto*
+### Utilidades:
+
+✅ Registro de Usuario (Com envio de e-mail para confirmação de conta)
+
+✅ Recuperação de Senha com e-mail (enviar um código para recuperar a senha)
+
+✅ Atualizar senha (passando o código enviado por e-mail)
+
+⌛ Usuario colocar foto
 
 ### Descrição de Entidade:
 
@@ -22,12 +30,18 @@ Desenvolver um sistema de autenticação de usuário, permitindo que o usuário 
   * Senha (Required, varchar)
   * CriadoEm (Required, DateTime)
   * AtualizadoEm (Required, DateTime)
+  * TokenDeVerificacao (Required, varchar)
+  * ContaVerificada (bool)
+  * VerificadoEm (DateTime)
+  * TokenDeResetSenha (varchar)
+  * ExpiraResetToken (DateTime)
  
 ### Registro do usuário
 
   * Pedir Nome, Email, Cpf, Senha.
   * Deve ser verificado se Email já esta em uso
   * O password deve ser armazenado utilizando algum algoritmo de hash (Argon2).
+  * Será enviado e-mail com link para verificação da conta, só poderá se logar quando estiver verificado.
 
 ### 🛠 Tecnologias
 - [.NET 6](https://dotnet.microsoft.com/pt-br/download/dotnet/6.0)
