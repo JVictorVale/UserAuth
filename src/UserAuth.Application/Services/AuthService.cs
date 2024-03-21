@@ -34,7 +34,6 @@ public class AuthService : BaseService, IAuthService
         _jwtSettings = jwtSettings.Value;
     }
     
-    //Register
     public async Task<UsuarioDto?> Cadastrar(RegistrarUsuarioDto registrarUsuarioDto)
     {
         var usuario = Mapper.Map<Usuario>(registrarUsuarioDto);
@@ -66,7 +65,6 @@ public class AuthService : BaseService, IAuthService
         return null;
     }
     
-    //Login
     public async Task<TokenDto?> Login(LoginUsuarioDto loginUsuarioDto)
     {
         var usuario = await _usuarioRepository.ObterPorEmail(loginUsuarioDto.Email);
@@ -92,8 +90,7 @@ public class AuthService : BaseService, IAuthService
             Token = await GerarToken(usuario)
         };
     }
-
-    //VerifyEmail
+    
     
     public async Task<bool> VerificarEmail(string token, string email)
     {
@@ -118,18 +115,15 @@ public class AuthService : BaseService, IAuthService
         return false;
     }
     
-    //ForgotPassword
     public async Task<bool> EsqueceuSenha(string email)
     {
-        // Verificar se o usuário com o e-mail fornecido existe no banco de dados
         var usuario = await _usuarioRepository.ObterPorEmail(email);
         if (usuario == null)
         {
             Notificator.Handle("Usuário não encontrado.");
             return false;
         }
-    
-        // Verificar se já existe um pedido no banco com expiração válida
+        
         var pedidoResetSenha = await _usuarioRepository.ObterPedidoResetSenhaValido(usuario.Id);
         if (pedidoResetSenha != null)
         {
@@ -140,8 +134,7 @@ public class AuthService : BaseService, IAuthService
         usuario.TokenDeResetSenha = CriarTokenEsqueceuSenha();
         usuario.ExpiraResetToken = DateTime.Now.AddHours(3);
         _usuarioRepository.Atualizar(usuario);
-    
-        // Confirmar a transação para persistir os dados no banco de dados
+        
         await _usuarioRepository.UnitOfWork.Commit();
     
         await _emailService.SendEmailRecoverPassword(usuario);
@@ -149,7 +142,6 @@ public class AuthService : BaseService, IAuthService
         return true;
     }
     
-    //ResetPassword (Update Password)
     public async Task<bool> ResetSenha(ResetSenhaDto requestDto)
     {
         var usuario = await _usuarioRepository.ObterPorTokenDeResetSenha(requestDto.Token);
@@ -165,15 +157,15 @@ public class AuthService : BaseService, IAuthService
             return false;
         }
         
-        if (!string.IsNullOrEmpty(requestDto.Password) && requestDto.Password != requestDto.ConfirmPassword)
+        if (!string.IsNullOrEmpty(requestDto.Senha) && requestDto.Senha != requestDto.ConfirmarSenha)
         {
             Notificator.Handle("As senhas informadas não coincidem");
             return false;
         }
 
-        if (!string.IsNullOrEmpty(requestDto.Password))
+        if (!string.IsNullOrEmpty(requestDto.Senha))
         {
-            usuario.Senha = _passwordHasher.HashPassword(usuario, requestDto.Password);
+            usuario.Senha = _passwordHasher.HashPassword(usuario, requestDto.Senha);
         }
 
         usuario.TokenDeResetSenha = null;

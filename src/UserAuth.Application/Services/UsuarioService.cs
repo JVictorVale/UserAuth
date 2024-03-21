@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Identity;
 using UserAuth.Application.Contracts;
 using UserAuth.Application.DTOs.Usuario;
 using UserAuth.Application.Notifications;
@@ -11,12 +10,10 @@ namespace UserAuth.Application.Services;
 public class UsuarioService : BaseService, IUsuarioService
 {
     private readonly IUsuarioRepository _usuarioRepository;
-    private readonly IPasswordHasher<Usuario> _passwordHasher;
     
-    public UsuarioService(IMapper mapper, INotificator notificator, IUsuarioRepository usuarioRepository, IPasswordHasher<Usuario> passwordHasher) : base(mapper, notificator)
+    public UsuarioService(IMapper mapper, INotificator notificator, IUsuarioRepository usuarioRepository) : base(mapper, notificator)
     {
         _usuarioRepository = usuarioRepository;
-        _passwordHasher = passwordHasher;
     }
 
     public async Task<UsuarioDto?> Atualizar(int id, AtualizarUsuarioDto usuarioDto)
@@ -33,22 +30,11 @@ public class UsuarioService : BaseService, IUsuarioService
             Notificator.HandleNotFoundResource();
             return null;
         }
-
-        if (!string.IsNullOrEmpty(usuarioDto.Senha) && usuarioDto.Senha != usuarioDto.ConfirmarSenha)
-        {
-            Notificator.Handle("As senhas informadas não coincidem");
-            return null;
-        }
         
         Mapper.Map(usuarioDto, usuario);
         if (!await Validar(usuario))
         {
             return null;
-        }
-        
-        if (!string.IsNullOrEmpty(usuarioDto.Senha))
-        {
-            usuario.Senha = _passwordHasher.HashPassword(usuario, usuarioDto.Senha);
         }
         
         _usuarioRepository.Atualizar(usuario);
