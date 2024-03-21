@@ -26,6 +26,10 @@ public class UsuarioMapping : IEntityTypeConfiguration<Usuario>
             .HasMaxLength(255)
             .IsRequired();
         
+        builder.Property(c => c.Foto)
+            .HasMaxLength(255)
+            .IsRequired(false);
+        
         builder
             .Property(u => u.TokenDeVerificacao)
             .HasMaxLength(255)
