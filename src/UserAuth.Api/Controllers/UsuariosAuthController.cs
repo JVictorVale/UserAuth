@@ -24,7 +24,7 @@ public class UsuariosAuthController : BaseController
     [ProducesResponseType(typeof(UsuarioDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
-    public async Task<IActionResult> Cadastrar([FromBody] RegistrarUsuarioDto dto)
+    public async Task<IActionResult> Cadastrar([FromForm] RegistrarUsuarioDto dto)
     {
         return OkResponse(await _authService.Cadastrar(dto));
     }

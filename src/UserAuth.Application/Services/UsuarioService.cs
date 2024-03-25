@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using UserAuth.Application.Contracts;
 using UserAuth.Application.DTOs.Usuario;
 using UserAuth.Application.Notifications;
+using UserAuth.Core.Enums;
 using UserAuth.Domain.Contracts.Repositories;
 using UserAuth.Domain.Entities;
 
@@ -10,10 +12,12 @@ namespace UserAuth.Application.Services;
 public class UsuarioService : BaseService, IUsuarioService
 {
     private readonly IUsuarioRepository _usuarioRepository;
+    private readonly IFileService _fileService;
     
-    public UsuarioService(IMapper mapper, INotificator notificator, IUsuarioRepository usuarioRepository) : base(mapper, notificator)
+    public UsuarioService(IMapper mapper, INotificator notificator, IUsuarioRepository usuarioRepository, IFileService fileService) : base(mapper, notificator)
     {
         _usuarioRepository = usuarioRepository;
+        _fileService = fileService;
     }
 
     public async Task<UsuarioDto?> Atualizar(int id, AtualizarUsuarioDto usuarioDto)
@@ -35,6 +39,11 @@ public class UsuarioService : BaseService, IUsuarioService
         if (!await Validar(usuario))
         {
             return null;
+        }
+        
+        if (usuarioDto.Foto is { Length: > 0 } && !await ManterFoto(usuarioDto.Foto, usuario))
+        {
+            usuario.Foto = await _fileService.Upload(usuarioDto.Foto, EUploadPath.FotoUsuarios);
         }
         
         _usuarioRepository.Atualizar(usuario);
@@ -67,6 +76,18 @@ public class UsuarioService : BaseService, IUsuarioService
         
         Notificator.Handle("Não existe usuário cadastrado");
         return null;
+    }
+    
+    private async Task<bool> ManterFoto(IFormFile foto, Usuario usuario)
+    {
+        if (!string.IsNullOrWhiteSpace(usuario.Foto) && !_fileService.Apagar(new Uri(usuario.Foto)))
+        {
+            Notificator.Handle("Não foi possível remover a foto anterior.");
+            return false;
+        }
+
+        usuario.Foto = await _fileService.Upload(foto, EUploadPath.FotoUsuarios);
+        return true;
     }
 
     private async Task<bool> Validar(Usuario usuario)
