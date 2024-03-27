@@ -11,8 +11,8 @@ namespace UserAuth.Application.Services;
 
 public class UsuarioService : BaseService, IUsuarioService
 {
-    private readonly IUsuarioRepository _usuarioRepository;
     private readonly IFileService _fileService;
+    private readonly IUsuarioRepository _usuarioRepository;
     
     public UsuarioService(IMapper mapper, INotificator notificator, IUsuarioRepository usuarioRepository, IFileService fileService) : base(mapper, notificator)
     {
@@ -41,9 +41,9 @@ public class UsuarioService : BaseService, IUsuarioService
             return null;
         }
         
-        if (usuarioDto.Foto is { Length: > 0 } && !await ManterFoto(usuarioDto.Foto, usuario))
+        if (usuarioDto.Fotos is { Length: > 0 } && !await ManterFoto(usuarioDto.Fotos, usuario))
         {
-            usuario.Foto = await _fileService.Upload(usuarioDto.Foto, EUploadPath.FotoUsuarios);
+            usuario.Foto = await _fileService.Upload(usuarioDto.Fotos, EUploadPath.FotoUsuarios);
         }
         
         _usuarioRepository.Atualizar(usuario);
@@ -78,17 +78,6 @@ public class UsuarioService : BaseService, IUsuarioService
         return null;
     }
     
-    private async Task<bool> ManterFoto(IFormFile foto, Usuario usuario)
-    {
-        if (!string.IsNullOrWhiteSpace(usuario.Foto) && !_fileService.Apagar(new Uri(usuario.Foto)))
-        {
-            Notificator.Handle("Não foi possível remover a foto anterior.");
-            return false;
-        }
-
-        usuario.Foto = await _fileService.Upload(foto, EUploadPath.FotoUsuarios);
-        return true;
-    }
 
     private async Task<bool> Validar(Usuario usuario)
     {
@@ -106,5 +95,17 @@ public class UsuarioService : BaseService, IUsuarioService
         }
 
         return !Notificator.HasNotification;
+    }
+    
+    private async Task<bool> ManterFoto(IFormFile foto, Usuario usuario)
+    {
+        if (!string.IsNullOrWhiteSpace(usuario.Foto) && !_fileService.Apagar(new Uri(usuario.Foto)))
+        {
+            Notificator.Handle("Não foi possível remover a foto anterior.");
+            return false;
+        }
+
+        usuario.Foto = await _fileService.Upload(foto, EUploadPath.FotoUsuarios);
+        return true;
     }
 }

@@ -11,6 +11,7 @@ using UserAuth.Application.DTOs.Auth;
 using UserAuth.Application.DTOs.Usuario;
 using UserAuth.Application.Email;
 using UserAuth.Application.Notifications;
+using UserAuth.Core.Enums;
 using UserAuth.Core.Settings;
 using UserAuth.Domain.Contracts.Repositories;
 using UserAuth.Domain.Entities;
@@ -19,18 +20,20 @@ namespace UserAuth.Application.Services;
 
 public class AuthService : BaseService, IAuthService
 {
+    private readonly IFileService _fileService;
     private readonly IUsuarioRepository _usuarioRepository;
     private readonly IPasswordHasher<Usuario> _passwordHasher;
     private readonly IJwtService _jwtService;
     private readonly JwtSettings _jwtSettings;
     private readonly IEmailService _emailService;
     
-    public AuthService(IMapper mapper, INotificator notificator, IUsuarioRepository usuarioRepository, IPasswordHasher<Usuario> passwordHasher, IJwtService jwtService, IOptions<JwtSettings> jwtSettings, IEmailService emailService) : base(mapper, notificator)
+    public AuthService(IMapper mapper, INotificator notificator, IUsuarioRepository usuarioRepository, IPasswordHasher<Usuario> passwordHasher, IJwtService jwtService, IOptions<JwtSettings> jwtSettings, IEmailService emailService, IFileService fileService) : base(mapper, notificator)
     {
         _usuarioRepository = usuarioRepository;
         _passwordHasher = passwordHasher;
         _jwtService = jwtService;
         _emailService = emailService;
+        _fileService = fileService;
         _jwtSettings = jwtSettings.Value;
     }
     
@@ -47,6 +50,11 @@ public class AuthService : BaseService, IAuthService
         if (!await Validar(usuario))
         {
             return null;
+        }
+        
+        if (registrarUsuarioDto.Foto is { Length: > 0 })
+        {
+            usuario.Foto = await _fileService.Upload(registrarUsuarioDto.Foto, EUploadPath.FotoUsuarios);
         }
         
         usuario.Senha = _passwordHasher.HashPassword(usuario, usuario.Senha);

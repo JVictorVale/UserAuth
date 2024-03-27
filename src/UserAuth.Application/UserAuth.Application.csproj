@@ -8,8 +8,9 @@
 
     <ItemGroup>
       <PackageReference Include="AutoMapper" Version="13.0.1" />
-      <PackageReference Include="FluentValidation" Version="11.9.0" />
+      <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
+      <PackageReference Include="Microsoft.Extensions.FileProviders.Physical" Version="6.0.0" />
       <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="6.0.0" />
       <PackageReference Include="NetDevPack.Security.Jwt.AspNetCore" Version="8.1.1" />
       <PackageReference Include="NetDevPack.Security.Jwt.Core" Version="8.1.1" />

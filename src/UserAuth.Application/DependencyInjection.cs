@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿
+using System.Net;
 using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -25,6 +26,7 @@ public static class DependencyInjection
         services.Configure<AppSettings>(configuration.GetSection("AppSettings"));
         services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
         services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
+        services.Configure<UploadSettings>(configuration.GetSection("UploadSettings"));
     }
     
     public static void ConfigureApplication(this IServiceCollection services, IConfiguration configuration)
@@ -45,9 +47,9 @@ public static class DependencyInjection
             .AddScoped<IPasswordHasher<Usuario>, Argon2PasswordHasher<Usuario>>();
 
         services
-            .AddScoped<IAuthService, AuthService>() 
-            .AddScoped<IUsuarioService, UsuarioService>()
+            .AddScoped<IAuthService, AuthService>()
             .AddScoped<IFileService, FileService>()
+            .AddScoped<IUsuarioService, UsuarioService>()
             .AddScoped<IEmailService, EmailService>();
     }
     

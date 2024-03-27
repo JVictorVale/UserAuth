@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
 using UserAuth.Application.Contracts;
 using UserAuth.Core.Enums;
@@ -9,7 +9,7 @@ namespace UserAuth.Application.Services;
 
 public class FileService : IFileService
 {
-     private readonly AppSettings _appSettings;
+    private readonly AppSettings _appSettings;
     private readonly UploadSettings _uploadSettings;
 
     public FileService(IOptions<AppSettings> appSettings, IOptions<UploadSettings> uploadSettings)

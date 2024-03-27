@@ -1,4 +1,4 @@
-namespace UserAuth.Core.Settings;
+﻿namespace UserAuth.Core.Settings;
 
 public class UploadSettings
 {
