@@ -24,7 +24,7 @@ public class UsuariosAuthController : BaseController
     [ProducesResponseType(typeof(UsuarioDto), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
-    public async Task<IActionResult> Cadastrar([FromForm] RegistrarUsuarioDto dto)
+    public async Task<IActionResult> Cadastrar([FromBody] RegistrarUsuarioDto dto)
     {
         return OkResponse(await _authService.Cadastrar(dto));
     }
@@ -41,7 +41,7 @@ public class UsuariosAuthController : BaseController
         return usuario != null ? OkResponse(usuario) : Unauthorized(new[] { "Usuario e/ou senha incorretos" });
     }
 
-    [HttpGet("verificar")]
+    [HttpGet("verificar-conta")]
     [SwaggerOperation(Summary = "Verificar e-mail do usuário", Tags = new[] { "Usuário - Auth" })]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

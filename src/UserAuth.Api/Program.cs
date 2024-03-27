@@ -57,6 +57,8 @@ app.UseAuthorization();
 
 app.UseStaticFileConfiguration(builder.Configuration);
 
+app.UseStaticFileConfiguration(app.Configuration);
+
 app.MapControllers();
 
 app.Run();

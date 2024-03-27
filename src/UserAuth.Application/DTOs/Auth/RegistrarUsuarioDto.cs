@@ -9,5 +9,4 @@ public class RegistrarUsuarioDto
     public string Email { get; set; } = null!;
     public string Senha { get; set; } = null!;
     public string ConfirmarSenha { get; set; } = null!;
-    public IFormFile? Foto { get; set; }
 }

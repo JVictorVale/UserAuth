@@ -22,7 +22,7 @@ public class UsuariosController : BaseController
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Update(int id, [FromForm] AtualizarUsuarioDto dto)
+    public async Task<IActionResult> Atualizar(int id, [FromForm] AtualizarUsuarioDto dto)
     {
         return OkResponse(await _usuarioService.Atualizar(id, dto));
     }

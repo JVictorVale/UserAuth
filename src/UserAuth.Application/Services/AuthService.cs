@@ -52,11 +52,6 @@ public class AuthService : BaseService, IAuthService
             return null;
         }
         
-        if (registrarUsuarioDto.Foto is { Length: > 0 })
-        {
-            usuario.Foto = await _fileService.Upload(registrarUsuarioDto.Foto, EUploadPath.FotoUsuarios);
-        }
-        
         usuario.Senha = _passwordHasher.HashPassword(usuario, usuario.Senha);
         
         usuario.TokenDeVerificacao = CreateRandomToken();

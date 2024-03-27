@@ -9,7 +9,7 @@ namespace UserAuth.Application.Services;
 
 public class FileService : IFileService
 {
-    private readonly AppSettings _appSettings;
+     private readonly AppSettings _appSettings;
     private readonly UploadSettings _uploadSettings;
 
     public FileService(IOptions<AppSettings> appSettings, IOptions<UploadSettings> uploadSettings)
@@ -18,7 +18,7 @@ public class FileService : IFileService
         _uploadSettings = uploadSettings.Value;
     }
 
-    public async Task<string> Upload(IFormFile arquivo, EUploadPath uploadPath,
+    public async Task<string> UploadPhoto(IFormFile arquivo, EUploadPath uploadPath,
         EPathAccess pathAccess = EPathAccess.Private, int urlLimitLength = 255)
     {
         var fileName = GenerateNewFileName(arquivo.FileName, pathAccess, uploadPath, urlLimitLength);
@@ -36,6 +36,25 @@ public class FileService : IFileService
         }
 
         return GetFileUrl(fileName, pathAccess, uploadPath);
+    }
+
+    public async Task<string> UploadPdf(IFormFile arquivo, EUploadPath uploadPath, EPathAccess pathAccess = EPathAccess.Private, int urlLimitLength = 255)
+    {
+        var fileName = GenerateNewFileName(arquivo.FileName, pathAccess, EUploadPath.PdfUsuarios, urlLimitLength);
+        var filePath = MountFilePath(fileName, pathAccess, EUploadPath.PdfUsuarios);
+
+        try
+        {
+            await File.WriteAllBytesAsync(filePath, ConvertFileInByteArray(arquivo));
+        }
+        catch (DirectoryNotFoundException)
+        {
+            var file = new FileInfo(filePath);
+            file.Directory?.Create();
+            await File.WriteAllBytesAsync(filePath, ConvertFileInByteArray(arquivo));
+        }
+
+        return GetFileUrl(fileName, pathAccess, EUploadPath.PdfUsuarios);
     }
 
     public string ObterPath(Uri uri)

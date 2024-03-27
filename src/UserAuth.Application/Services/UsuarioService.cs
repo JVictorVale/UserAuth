@@ -43,7 +43,12 @@ public class UsuarioService : BaseService, IUsuarioService
         
         if (usuarioDto.Fotos is { Length: > 0 } && !await ManterFoto(usuarioDto.Fotos, usuario))
         {
-            usuario.Foto = await _fileService.Upload(usuarioDto.Fotos, EUploadPath.FotoUsuarios);
+            usuario.Foto = await _fileService.UploadPhoto(usuarioDto.Fotos, EUploadPath.FotoUsuarios);
+        }
+        
+        if (usuarioDto.Pdf is not null && !await ManterPdf(usuarioDto.Pdf, usuario))
+        {
+            usuario.Pdf = await _fileService.UploadPdf(usuarioDto.Pdf, EUploadPath.PdfUsuarios);
         }
         
         _usuarioRepository.Atualizar(usuario);
@@ -99,13 +104,25 @@ public class UsuarioService : BaseService, IUsuarioService
     
     private async Task<bool> ManterFoto(IFormFile foto, Usuario usuario)
     {
-        if (!string.IsNullOrWhiteSpace(usuario.Foto) && !_fileService.Apagar(new Uri(usuario.Foto)))
+        if (!string.IsNullOrWhiteSpace(usuario.Foto) && Uri.TryCreate(usuario.Foto, UriKind.Absolute, out Uri? fotoUri) && !_fileService.Apagar(fotoUri))
         {
             Notificator.Handle("Não foi possível remover a foto anterior.");
             return false;
         }
 
-        usuario.Foto = await _fileService.Upload(foto, EUploadPath.FotoUsuarios);
+        usuario.Foto = await _fileService.UploadPhoto(foto, EUploadPath.FotoUsuarios);
+        return true;
+    }
+    
+    private async Task<bool> ManterPdf(IFormFile pdf, Usuario usuario)
+    {
+        if (!string.IsNullOrWhiteSpace(usuario.Pdf) && Uri.TryCreate(usuario.Pdf, UriKind.Absolute, out Uri? pdfUri) && !_fileService.Apagar(pdfUri))
+        {
+            Notificator.Handle("Não foi possível remover o PDF anterior.");
+            return false;
+        }
+
+        usuario.Pdf = await _fileService.UploadPdf(pdf, EUploadPath.FotoUsuarios);
         return true;
     }
 }

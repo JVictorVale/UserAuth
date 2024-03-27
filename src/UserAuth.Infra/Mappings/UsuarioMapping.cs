@@ -30,6 +30,10 @@ public class UsuarioMapping : IEntityTypeConfiguration<Usuario>
             .HasMaxLength(255)
             .IsRequired(false);
         
+        builder.Property(c => c.Pdf)
+            .HasMaxLength(255)
+            .IsRequired(false);
+        
         builder
             .Property(u => u.TokenDeVerificacao)
             .HasMaxLength(255)

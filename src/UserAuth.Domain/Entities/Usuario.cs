@@ -11,6 +11,7 @@ public class Usuario : Entity, IAggregateRoot
     public string Cpf { get; set; } = null!;
     public string Senha { get; set; } = null!;
     public string? Foto { get; set; }
+    public string? Pdf { get; set; }
     public string TokenDeVerificacao { get; set; } = null!;
     public bool ContaVerificada { get; set; }
     public DateTime VerificadoEm { get; set; }
